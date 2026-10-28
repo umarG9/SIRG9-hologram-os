@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sir G9 - Air OS</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{background:radial-gradient(ellipse at center,#0a0a1a 0%,#000 100%);color:#00D9FF;height:100vh;overflow:hidden}
+.center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;width:92%;max-width:340px}
+.logo{font-size:38px;font-weight:900;letter-spacing:6px;text-shadow:0 0 30px #00D9FF}
+.logo span{color:#fff}
+.sub{font-size:10px;letter-spacing:4px;opacity:0.6;margin-top:8px;color:#8EEFFF}
+.pulse{width:140px;height:140px;border:2px solid #00D9FF;border-radius:50%;margin:30px auto;position:relative;animation:pulse 2.2s infinite}
+.pulse::after{content:'G9';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-weight:900;font-size:26px;color:#fff;letter-spacing:2px}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(0,217,255,0.7)}70%{box-shadow:0 0 0 35px rgba(0,217,255,0)}100%{box-shadow:0 0 0 0 rgba(0,217,255,0)}}
+
+#air-screen{
+ position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);
+ width:92vw;max-width:440px;height:78vh;
+ background:linear-gradient(180deg,rgba(5,20,35,0.92),rgba(0,0,0,0.98));
+ border:1px solid #00D9FF;border-radius:28px;
+ box-shadow:0 0 80px rgba(0,217,255,0.4), inset 0 0 40px rgba(0,217,255,0.08);
+ backdrop-filter:blur(22px);padding:20px;display:none;z-index:10;
+ animation:float 4s infinite ease-in-out;
+}
+@keyframes float{0%,100%{transform:translate(-50%,-52%)}50%{transform:translate(-50%,-48%)}}
+
+.header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #0a2a3a;padding-bottom:12px}
+.badge{background:#00D9FF;color:#000;padding:4px 12px;border-radius:12px;font-size:9px;font-weight:900;letter-spacing:1px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.card{background:#020a12;border:1px solid #0a2a3a;padding:14px;border-radius:16px;position:relative;overflow:hidden;text-align:left}
+.card::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:2px;background:linear-gradient(90deg,transparent,#00D9FF,transparent);animation:scan 3s infinite}
+@keyframes scan{0%{left:-100%}100%{left:100%}}
+.card-title{font-size:12px;font-weight:800;color:#fff}
+.card-sub{font-size:10px;opacity:0.6;margin-top:3px;color:#8EEFFF}
+
+.wake-bar{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:rgba(5,20,35,0.92);border:1px solid #00D9FF;padding:12px 20px;border-radius:30px;font-size:11px;display:flex;align-items:center;gap:10px;backdrop-filter:blur(12px)}
+.dot{width:9px;height:9px;background:#ff3344;border-radius:50%;animation:blink 1s infinite}
+.dot.on{background:#00D9FF;box-shadow:0 0 10px #00D9FF}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+
+input{width:100%;padding:13px;border-radius:14px;background:#020a12;border:1px solid #00D9FF;color:#fff;margin:10px 0;text-align:center;letter-spacing:1px}
+.btn{background:#00D9FF;color:#000;border:none;padding:14px;width:100%;border-radius:28px;font-weight:900;cursor:pointer;margin-top:12px;letter-spacing:1px;font-size:13px}
+.btn-outline{background:transparent;border:1px solid #00D9FF;color:#00D9FF}
+.log{margin-top:14px;background:#000000cc;padding:10px;border-radius:12px;font-size:10px;min-height:38px;border-left:2px solid #00D9FF;color:#8EEFFF;line-height:1.5}
+</style>
+</head>
+<body>
+
+<div class="center" id="setup">
+  <div class="logo">Sir <span>G9</span></div>
+  <div class="sub">AIR PROJECTION OS</div>
+  <div class="pulse"></div>
+  <div>
+    <p style="font-size:11px;color:#666;line-height:1.6">No phone in hand. Everything from your phone appears floating in air. Projected directly from your screen. Just call its name.</p>
+    <input id="aiName" value="Sir G9" placeholder="Wake name">
+    <button class="btn" onclick="init()">ACTIVATE Sir G9</button>
+    <p style="font-size:9px;margin-top:14px;color:#333">Voice Activated • Air Projection • Phone Mirroring</p>
+  </div>
+</div>
+
+<div id="air-screen">
+  <div class="header">
+    <div><span style="font-weight:900;letter-spacing:3px;color:#fff">Sir G9</span> <span class="badge">AIR MODE</span></div>
+    <div style="font-size:11px;color:#fff" id="clock">00:00</div>
+  </div>
+  <div style="font-size:11px;margin-top:12px;color:#8EEFFF" id="status">🔊 Say "Sir G9" to wake</div>
+  
+  <div class="grid">
+    <div class="card"><div class="card-title">📱 Phone Mirror</div><div class="card-sub" id="mirror">Live from your device</div></div>
+    <div class="card"><div class="card-title">💬 Messages</div><div class="card-sub">All messages in air</div></div>
+    <div class="card"><div class="card-title">📞 Calls</div><div class="card-sub">Voice dial enabled</div></div>
+    <div class="card"><div class="card-title">🖼️ Gallery</div><div class="card-sub">Photos floating</div></div>
+    <div class="card"><div class="card-title">🎬 Media</div><div class="card-sub">Videos in air</div></div>
+    <div class="card"><div class="card-title">⚙️ System</div><div class="card-sub">Air projection ON</div></div>
+  </div>
+
+  <div class="log" id="log">> Sir G9 initialized...<br>> Air projection engine ready...<br>> Waiting for wake word...</div>
+  
+  <button class="btn" onclick="talk()">TALK TO Sir G9</button>
+  <button class="btn btn-outline" onclick="closeAir()">CLOSE PROJECTION</button>
+</div>
+
+<div class="wake-bar" id="wakeBar" style="display:none">
+  <div class="dot" id="dot"></div>
+  <span>🎤 Say <b id="wakeName">Sir G9</b> | <span id="heard">...</span></span>
+</div>
+
+<script>
+let recognition, active=false, WAKE='SIR G9';
+function init(){
+  WAKE = document.getElementById('aiName').value.toUpperCase() || 'SIR G9';
+  document.getElementById('setup').style.display='none';
+  document.getElementById('wakeBar').style.display='flex';
+  document.getElementById('wakeName').innerText=WAKE;
+  setInterval(()=>{document.getElementById('clock').innerText=new Date().toLocaleTimeString()},1000);
+  
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR){ alert('Please use Chrome browser'); return; }
+  
+  recognition = new SR();
+  recognition.continuous=true; recognition.interimResults=true; recognition.lang='en-US';
+  
+  recognition.onstart=()=>document.getElementById('dot').classList.add('on');
+  recognition.onresult=(e)=>{
+    let t=e.results[e.results.length-1][0].transcript.toUpperCase();
+    document.getElementById('heard').innerText=t;
+    log('You: '+t);
+    if(t.includes(WAKE) || t.includes('SIR G9') || t.includes('G9') || t.includes('SIR')){
+      openAir();
+      if(t.includes('CALL')) speak('Voice calling enabled');
+      else if(t.includes('CLOSE')||t.includes('EXIT')) setTimeout(closeAir,1200);
+      else speak('Sir G9 is here. Your phone is now projected in air.');
+    }
+  };
+  recognition.onend=()=>{ if(active) recognition.start(); };
+  recognition.start(); active=true;
+  log('> Wake word set: '+WAKE+'<br>> Listening in air...');
+  speak('Sir G9 activated. Projecting your phone into air.');
+}
+
+function openAir(){
+  document.getElementById('air-screen').style.display='block';
+  document.getElementById('status').innerText='✅ '+WAKE+' detected - Projection active';
+  if(navigator.vibrate) navigator.vibrate([80,40,80]);
+  log('> Air projection: screen emerged from device and floating');
+}
+function closeAir(){
+  document.getElementById('air-screen').style.display='none';
+  log('> Projection closed'); speak('Closing air projection');
+}
+function log(m){ document.getElementById('log').innerHTML=m; }
+function talk(){ speak('Sir G9 listening. Your phone content is floating in air. What do you want?'); }
+function speak(t){
+  let u=new SpeechSynthesisUtterance(t); u.rate=0.92; u.pitch=0.9; speechSynthesis.speak(u); log('Sir G9: '+t);
+}
+</script>
+</body>
+</html>
